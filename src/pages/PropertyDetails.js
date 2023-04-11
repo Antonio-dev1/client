@@ -3,6 +3,7 @@ import { housesData } from "../testdata";
 import { useParams , Link} from "react-router-dom";
 import { BiBed , BiBath , BiArea } from "react-icons/bi";
 import { useEffect , useState , useContext} from "react";
+import Footer from "../components/Footer";
 
 const  PropertyDetails = () => {
     useEffect (() => {},   //This is for loading the specific data of the property using the endpoint of the property. Another solution is to use the context and get them from the house context
@@ -71,21 +72,22 @@ const  PropertyDetails = () => {
                             <Link to="" className="text-violet-500 text-sm ">View Listings</Link>
                         </div>
                     </div>
-                    <form>
-                        <input type = 'text'> </input>
-                        <input type = 'text'> </input>
-                        <input type = 'text'> </input>
-                        <textarea>
-                            <div>
-                                <button>Send Message</button>
-                                <button>Call Me</button>
+                    <form className="flex flex-col gap-y-4">
+                        <input className="border border-gray-300 focus:border-violet-700 outline-none rounded w-full px-4 h-14 text-sm" placeholder = "Email" type = 'text'/> 
+                        <input className= "border border-gray-300 focus:border-violet-700 outline-none rounded w-full px-4 h-14 text-sm" placeholder = "Subject" type = 'text'/> 
+                        <textarea className="border border-gray-300 focus:border-violet-700 outline-none resize-none rounded w-full p-4 h-36 text-sm text-gray-400" placeholder = "Message"/> 
+                            <div className="flex gap-x-3">
+                                <button className="bg-violet-500 hover:bg-violet-600 text-white rounded p-4 text-sm w-full transition">Send an Email!</button>
+                                <button className="border border-violet-500 text-violet-600 hover:border-violet-300 hover:text-violet-300 rounded  p-4 text-sm w-full
+                                transition">Chat!</button>
                             </div>
-                        </textarea>
+                        
                     </form>
                 </div>
                 </div>
             </div>
         </section>
+        <Footer/>
     </div> );
 }
  
