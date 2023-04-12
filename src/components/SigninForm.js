@@ -1,7 +1,11 @@
 import {FcGoogle} from 'react-icons/fc'
 import logo from '../assets/imgs/logo.png'
-import { useState } from "react";
+import { useState  , useEffect} from "react";
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
+import { UserContext } from "./UserContext";
+import { useContext } from "react";
+
 const SigninForm = () => {
    
     const navigate = useNavigate();
@@ -9,6 +13,8 @@ const SigninForm = () => {
     const [loginPassword, setLoginPassword] = useState('');
     const [emailError , setEmailError] = useState('');
     const [passwordError , setPasswordError] = useState('');
+    const [loginFailed , setLoginFailed] = useState(false);
+    const {isLoggedIn, setIsLoggedIn , setUser , setJwt} = useContext(UserContext);
     
 
     function isValidEmail(loginEmail){
@@ -59,12 +65,27 @@ const SigninForm = () => {
         if(!validateLogin()){
             console.log("Cannot Login")
 
-        }else{
-            console.log("Successful Login")
+        }
+        else{
+            axios.post('http://localhost:3001/api/users/login' , {
+                email: loginEmail,
+                password: loginPassword,
+            }).then((response) => {
+                setIsLoggedIn(true);
+                setJwt(response.data.token);
+            }).catch(err => {
+                setLoginFailed(true);
+            });
         }
         
        
     }
+
+    useEffect(() => {
+        if(isLoggedIn){
+        navigate('/');
+        }
+    } , [isLoggedIn])
 
     return (  
         <div className="bg-white px-10  py-15 rounded-3xl border-2 border-gray-200"> 
@@ -78,6 +99,7 @@ const SigninForm = () => {
                 <label className="txt-lg font-medium">Email </label>
                 <input onChange = {(e) => {setLoginEmail(e.target.value)}} value = {loginEmail} className ="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent" id="email" type="email" placeholder="Enter your email"  required />
                 <div className = "text-red-500 text-sm-medium">{emailError}</div>
+                {loginFailed ? ( <div className="text-red-500 text-sm-medium">Invalid Username or Password</div>) : (<div> </div>) }
             </div>
             <div className="mt-8"> 
                 <label className="txt-lg font-medium">Password </label>

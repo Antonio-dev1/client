@@ -5,16 +5,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import HouseContextProvider from './components/HouseContext';
+import UserContextProvider from './components/UserContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
   <BrowserRouter>
+ <UserContextProvider>
   <HouseContextProvider>
   <React.StrictMode>
     <App />
     </React.StrictMode>
     </HouseContextProvider>
+    </UserContextProvider>
+    
   </BrowserRouter>
   
 );
