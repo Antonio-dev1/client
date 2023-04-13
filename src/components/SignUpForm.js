@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from '../assets/imgs/logo.png'
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
+
 const SignUpForm = () => {
     const navigate = useNavigate();
     const[firstName , setFirstName] = useState('');
@@ -13,6 +15,9 @@ const SignUpForm = () => {
     const[errorPassword , setErrorPassword] = useState('');
     const[confirmedPassword , setconfirmedPassword] = useState('');
     const[errorConfirmedPassword , setErrorConfirmedPassword] = useState('');
+    const[signupStatus , setSignupStatus] = useState('');
+    const[signUpFailed , setSignUpFailed] = useState('');
+    const [loadingSuccess , setLoadingSuccess] = useState(false);
 
     function isValidEmail(loginEmail){
         const regex =  /\S+@\S+\.\S+/;
@@ -87,10 +92,26 @@ const SignUpForm = () => {
             }
 
             else{
-                console.log("Successful Sign up")
+                axios.post('http://localhost:3001/api/users/' , {
+                    fullName : firstName + " " + lastName,
+                    email: userEmail,
+                    password: password,
+                }).then((response) => {
+                    setSignupStatus('Successfully signed up')
+                }).catch((err) =>{
+                    setSignUpFailed('User already exists');
+                });
             }
         
     }
+
+    useEffect(() => {
+        if(signupStatus == 'Successfully signed up'){
+            setTimeout(() => {
+                return navigate('/signin');
+            } , 1000)
+        }
+    } , [signupStatus])
 
 
 
@@ -112,6 +133,7 @@ const SignUpForm = () => {
             <div className="mt-1"> 
                 <input onChange = {(e) => {setUserEmail(e.target.value)}} value={userEmail}  className ="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"  type="text" placeholder="Email" required />
                 <div className="text-red-500 text-sm-medium"> {errorUserEmail}</div>
+                <div className="text-red-500 text-sm-medium"> {signUpFailed} </div>
             </div>
             <div className="mt-1"> 
                 <input onChange = {(e) => {setpassword(e.target.value)}} value={password} className ="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"  type="password" placeholder="password"  required />
@@ -120,6 +142,7 @@ const SignUpForm = () => {
             <div className="mt-1"> 
                 <input onChange = {(e) => {setconfirmedPassword(e.target.value)}} value={confirmedPassword} className ="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"  type="password" placeholder="Retype password"  required />
                 <div className="text-red-500 text-sm-medium"> {errorConfirmedPassword}</div>
+                <div className="text-green-500 text-sm-medium"> {signupStatus} </div>
             </div>
         
                 <div className="mt-6 flex flex-col ">
