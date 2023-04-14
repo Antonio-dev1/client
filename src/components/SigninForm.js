@@ -73,6 +73,7 @@ const SigninForm = () => {
             }).then((response) => {
                 setIsLoggedIn(true);
                 setJwt(response.data.token);
+                sessionStorage.setItem('jwt' , response.data.token);
             }).catch(err => {
                 setLoginFailed(true);
             });

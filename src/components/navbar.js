@@ -11,7 +11,7 @@ import {ImSpinner2} from 'react-icons/im';
 const NavBar = () => {
     const [toggleMenu, setToggleMenu] = useState(false);
     const [logginOut , setLogginOut] = useState(false);
-    const {isLoggedIn ,setIsLoggedIn, setJwt} = useContext(UserContext);
+    const {isLoggedIn ,setIsLoggedIn , setJwt} = useContext(UserContext);
 
     const navigate = useNavigate();
     const onFavoritesPressed = () => {
@@ -62,7 +62,8 @@ const NavBar = () => {
 
         setLogginOut(true);
         setTimeout(() => {
-        return setJwt(null),
+        return sessionStorage.setItem('jwt' , ''),
+        setJwt(''),
         setIsLoggedIn(false),
         setLogginOut(false);
         } , 1000)

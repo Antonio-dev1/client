@@ -2,8 +2,11 @@ import NavBar from "../components/navbar";
 import { housesData } from "../testdata";
 import { useParams , Link} from "react-router-dom";
 import { BiBed , BiBath , BiArea } from "react-icons/bi";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useEffect , useState , useContext} from "react";
 import Footer from "../components/Footer";
+import { AiOutlineHeart } from "react-icons/ai";
+import {Carousel} from 'react-responsive-carousel';
 
 const  PropertyDetails = () => {
     useEffect (() => {},   //This is for loading the specific data of the property using the endpoint of the property. Another solution is to use the context and get them from the house context
@@ -36,10 +39,17 @@ const  PropertyDetails = () => {
                 </div>
                 <div className="flex flex-col items-start gap-8 lg:flex-row">
                     <div className="max-w-[769px]">
-                        <div className="mb-8">
+                        
+                        <Carousel showArrows={true} showThumbs ={false}  infiniteLoop = {true}> 
+                        <div className="">
+                            <img src = {specificHouse.imageLg}  alt =''/>
+                        </div>
+                        <div>
                             <img src = {specificHouse.imageLg} alt =''/>
                         </div>
-                        <div className="flex gap-x-6 text-violet-500 mb-6 ">
+                        </Carousel>
+                        
+                        <div className="mt-7 flex gap-x-6 text-violet-500 mb-6 ">
                             <div className="flex gap-x-2 ">
                                 <BiBed className="text-2xl"/>
                                 <div>
@@ -60,6 +70,11 @@ const  PropertyDetails = () => {
                                     {specificHouse.surface}
                                 </div>
                                 
+                            </div>
+                            <div>
+                                <button>
+                                    <AiOutlineHeart className="text-3xl text-violet-400  hover:text-violet-700"/> 
+                                </button>
                             </div>
                         </div>
                         <div>{specificHouse.description}</div>
