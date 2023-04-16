@@ -65,7 +65,8 @@ const NavBar = () => {
         return sessionStorage.setItem('jwt' , ''),
         setJwt(''),
         setIsLoggedIn(false),
-        setLogginOut(false);
+        setLogginOut(false),
+        navigate('/')
         } , 1000)
         
     };
