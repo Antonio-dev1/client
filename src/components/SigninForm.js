@@ -15,6 +15,7 @@ const SigninForm = () => {
     const [passwordError , setPasswordError] = useState('');
     const [loginFailed , setLoginFailed] = useState(false);
     const {isLoggedIn, setIsLoggedIn , setUser , setJwt} = useContext(UserContext);
+
     
 
     function isValidEmail(loginEmail){
@@ -76,6 +77,7 @@ const SigninForm = () => {
                 sessionStorage.setItem('jwt' , response.data.token);
             }).catch(err => {
                 setLoginFailed(true);
+                console.log(err)
             });
         }
         
