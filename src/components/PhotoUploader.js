@@ -1,8 +1,8 @@
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import {BiTrash} from 'react-icons/bi';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import axios from 'axios';
-const PhotoUploader = ({savedPhotos, setSavedPhotos}) => {
+const PhotoUploader = ({savedPhotos, setSavedPhotos , changing}) => {
 
 const [currentPhotos, setCurrentPhotos] = useState([]);
 
@@ -38,6 +38,13 @@ const deletePhoto = (e , fileName) => {
     setSavedPhotos(savedPhotos.filter(photo => photo !== fileName));
 
 };
+
+useEffect(() => {
+    if(changing){
+        setCurrentPhotos([]);
+    }
+},
+ []);
 
 
     return (  
