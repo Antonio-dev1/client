@@ -44,7 +44,7 @@ useEffect(() => {
         setCurrentPhotos([]);
     }
 },
- []);
+ [changing]);
 
 
     return (  

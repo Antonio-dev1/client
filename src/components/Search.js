@@ -6,7 +6,7 @@ import {BsSearch} from "react-icons/bs";
 import { useContext } from "react";
 import { HouseContext } from "./HouseContext";
 const Search = () => {
-    const {handleSearchClick} = useContext(HouseContext);
+    const {onSearchPressed} = useContext(HouseContext);
     return ( 
         
         <div className="px-[20px] py-6 max-w-[1300px] mx-auto flex flex-col lg:flex-row justify-between gap-4 lg:-top-4 lg:shadow-1 
@@ -15,7 +15,7 @@ const Search = () => {
             <PriceDropdown/>
             <AreaDropdown/>
             <PropertDropdown/>
-            <button onClick = {() => handleSearchClick()} className="bg-violet-500 hover:bg-violet-600 transition w-full lg:max-w-[162px] 
+            <button onClick = {() => onSearchPressed()} className="bg-violet-500 hover:bg-violet-600 transition w-full lg:max-w-[162px] 
             h-16 rounded-lg flex justify-center items-center text-white text-lg"> <BsSearch/></button>
         </div>
 

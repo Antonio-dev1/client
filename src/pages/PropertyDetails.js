@@ -3,23 +3,50 @@ import { housesData } from "../testdata";
 import { useParams , Link} from "react-router-dom";
 import { BiBed , BiBath , BiArea } from "react-icons/bi";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { ImSpinner2 } from "react-icons/im";
 import { useEffect , useState , useContext} from "react";
 import Footer from "../components/Footer";
 import { AiOutlineHeart } from "react-icons/ai";
 import {Carousel} from 'react-responsive-carousel';
+import axios from "axios";
 
 const  PropertyDetails = () => {
-    useEffect (() => {},   //This is for loading the specific data of the property using the endpoint of the property. Another solution is to use the context and get them from the house context
-    []);
-
+    const [specificHouse , setSpecificHouse] = useState({});
+    const [isLoading , setIsLoading] = useState(true);
     //Get the id for the property based on the url
     // Get the property from the house data
     const {id} = useParams(); 
+
+
+    const fetchSpecificHouse = async () => {
+        try{
+            const response = await axios.get(`http://localhost:3001/api/properties/${id}`);
+            setSpecificHouse(response.data);
+            setIsLoading(false);
+
+        }
+        catch(error){
+            console.log(error);
+        }
+    };
+
+
+    useEffect (() => {
+        fetchSpecificHouse();
+    },   //This is for loading the specific data of the property using the endpoint of the property. Another solution is to use the context and get them from the house context
+    []);
+
+    if(isLoading){
+        return(
+            <div className="min-h-screen">
+                <NavBar/>
+                <ImSpinner2 className="mx-auto animate-spin text-violet-700 text-4xl mt-[150px]"></ImSpinner2>
+            </div>
+        )
+    }
     
 
-    const specificHouse = housesData.find((house) => {
-    return house.id === parseInt(id);
-})
+   
 
 
     return ( <div>
@@ -28,12 +55,14 @@ const  PropertyDetails = () => {
             <div className = "container mx-auto min-h-[800px] mb-14">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between ">
                     <div>
-                        <h2 className="text-2xl font-semibold">{specificHouse.name}</h2>
-                        <h3 className="text-lg mb-4 ">{specificHouse.address}</h3>
+                        <h2 className="text-2xl font-semibold">{specificHouse.title}</h2>
+                        <h3 className="text-lg mb-4 ">{specificHouse.location.split(',')[1]}</h3>
                     </div>
                     <div className="mb-4 lg:mb-0 flex gap-x-2 text-sm">
-                        <div className="bg-green-500 text-white px-3 rounded-full ">{specificHouse.type}</div>
-                        <div className="bg-violet-500 text-white px-3 rounded-full ">{specificHouse.country}</div>
+                        <div className="bg-green-500 text-white px-3 rounded-full ">{specificHouse.complexType}</div>
+                        <div className="bg-violet-500 text-white px-3 rounded-full ">{specificHouse.location.split(',')[1]}</div>
+                        <div className="bg-violet-500 text-white px-3 rounded-full ">{specificHouse.listingType}</div>
+
                     </div>
                     <div className = "text-3xl font-semibold text-violet-600">$ {specificHouse.price}</div>
                 </div>
@@ -41,12 +70,14 @@ const  PropertyDetails = () => {
                     <div className="max-w-[769px]">
                         
                         <Carousel showArrows={true} showThumbs ={false}  infiniteLoop = {true}> 
-                        <div className="">
-                            <img src = {specificHouse.imageLg}  alt =''/>
-                        </div>
-                        <div>
-                            <img src = {specificHouse.imageLg} alt =''/>
-                        </div>
+                        {specificHouse.imageurls.map((image , index) => {
+                            return(
+                                <div key={index}> 
+                                    <img src={image} />
+
+                                </div>
+                            )
+                        })}
                         </Carousel>
                         
                         <div className="mt-7 flex gap-x-6 text-violet-500 mb-6 ">
@@ -81,9 +112,11 @@ const  PropertyDetails = () => {
                     </div>
                 <div className="flex-1 bg-white w-full mb-8 border-gray-300 rounded-lg px-6 py-8 "> 
                     <div className="flex items-center gap-x-4 mb-8">
-                        <div> <img src= {specificHouse.agent.image} alt=""/> </div>
+                        <div> 
+                            <img src= {specificHouse.userId.profilePicture} alt=""/> 
+                            </div>
                         <div className="w-20 h-20"> 
-                            <div>{specificHouse.agent.name}</div>
+                            <div>{specificHouse.userId.fullName}</div>
                             <Link to="" className="text-violet-500 text-sm ">View Listings</Link>
                         </div>
                     </div>

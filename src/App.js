@@ -6,6 +6,8 @@ import { Routes, Route} from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import PlaceAd from './pages/PlaceAd';
+import MyListings from './pages/MyListings';
+import EditProperty from './pages/EditProperty';
 
 function App() {
   return (
@@ -17,8 +19,8 @@ function App() {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/profile" element ={<Profile/>} />
       <Route path="/postAd" element={<PlaceAd/>} />
-      
-      
+      <Route path="/myListings" element={<MyListings/>} />
+      <Route path="/editProperty/:id" element={<EditProperty/>} />
     </Routes>
    
     

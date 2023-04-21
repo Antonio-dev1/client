@@ -58,6 +58,17 @@ const NavBar = () => {
         }
     };
 
+    const onMyListingsPressed = () => {
+        if(isLoggedIn){
+            navigate('/myListings');
+            
+        }
+
+        else{
+            navigate('/signin');
+        }
+    }
+
     const handleLogout = () => {
 
         setLogginOut(true);
@@ -112,6 +123,9 @@ const NavBar = () => {
 
                 <li className="hover:text-gray-500">
                     <button onClick={(e) => onProfilePressed()}> Profile</button>
+                </li>
+                <li className= "hover:text-gray-500">
+                    <button onClick={(e) => onMyListingsPressed()}> My Listings</button>
                 </li>
             </ul>
 

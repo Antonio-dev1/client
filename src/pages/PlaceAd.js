@@ -40,7 +40,7 @@ const PlaceAd  = () => {
             price : price,
             bathrooms : bathrooms,
             bedrooms : bedrooms,
-            area : area,
+            surface: area,
             listingType : listingType,
             complexType : complexType,
             imageurls:savedPhotos,
@@ -190,7 +190,7 @@ const PlaceAd  = () => {
                 <div className=" mx-5 mt-7 flex md:gap-x-[280px] lg:gap-x-[218px]">
                     <div>
                         <label htmlFor="Country" className="block mb-2 text-medium font-bold text-violet-400 dark:text-white"> Country </label>
-                        <select defaultValue={'LB'} onChange={(e) => handleCountryChange(e)} value={countryValue} required className="rounded-md border-gray-300 text-gray-500 text-sm">
+                        <select onChange={(e) => handleCountryChange(e)} value={countryValue} required className="rounded-md border-gray-300 text-gray-500 text-sm">
                         {options.map((country , index) => {
                             return(
                                 <option key={index} value={country.value}>{country.label}</option>
@@ -210,15 +210,15 @@ const PlaceAd  = () => {
                 <div className="mx-5 mt-7 flex gap-x-[465px] lg:gap-x-[470px]">
                     <div>
                         <label htmlFor="listingType" className="block mb-2 text-medium font-bold text-violet-400 dark:text-white">Listing Type</label>
-                        <select defaultValue={'Rent'} onChange= {(e) => handleListingTypeChange(e)} required value={listingType} className="rounded-md border-gray-300 text-gray-500 text-sm">
-                        <option value={'Rent'}>Rent</option>
-                        <option value={'Sell'}> Sell</option>
+                        <select  onChange= {(e) => handleListingTypeChange(e)} required value={listingType} className="rounded-md border-gray-300 text-gray-500 text-sm">
+                        <option value={'Rent'}>Rent </option>
+                        <option value={'Sell'}> Sell </option>
                         </select>
                     </div>
 
                     <div >
                         <label htmlFor="complexType" className="block mb-2 text-medium font-bold text-violet-400 dark:text-white">Property Type</label>
-                        <select required defaultValue={'House'} onChange={(e) => handleComplexTypeChange(e)} value={complexType} className="rounded-md border-gray-300 text-gray-500 text-sm">
+                        <select required  onChange={(e) => handleComplexTypeChange(e)} value={complexType} className="rounded-md border-gray-300 text-gray-500 text-sm">
                         <option value={'Villa'}>Villa</option>
                         <option value={'Apartment'}> Apartment</option>
                         <option value={'House'}> House</option>
