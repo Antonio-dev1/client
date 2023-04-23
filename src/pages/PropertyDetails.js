@@ -5,17 +5,51 @@ import { BiBed , BiBath , BiArea } from "react-icons/bi";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { ImSpinner2 } from "react-icons/im";
 import { useEffect , useState , useContext} from "react";
+import { UserContext } from "../components/UserContext";
+import jwtDecode from "jwt-decode";
 import Footer from "../components/Footer";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart , AiFillHeart} from "react-icons/ai";
 import {Carousel} from 'react-responsive-carousel';
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 
 const  PropertyDetails = () => {
     const [specificHouse , setSpecificHouse] = useState({});
     const [isLoading , setIsLoading] = useState(true);
+    const [isFavorite , setIsFavorite] = useState(false);
+    const [favoriteID , setFavoriteID] = useState('');
     //Get the id for the property based on the url
     // Get the property from the house data
     const {id} = useParams(); 
+    const {isLoggedIn} = useContext(UserContext);
+    const jwt =  sessionStorage.getItem('jwt');
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }
+    }    
+
+    const fetchisFavorite = async () => {
+        try{
+            const response  = await axios.post('http://localhost:3001/api/favorites/favoritesearch' , {
+                user_id: jwtDecode(jwt).id,
+                property_id: id
+            } , config);
+            if(response.data){
+                if(response.data.message === "Favorited"){
+
+                console.log(response.data.message)
+                setFavoriteID(response.data.favorite._id);
+                setIsFavorite(true);
+                }
+                else{
+                    setIsFavorite(false);
+                }
+            }
+            
+        } catch(error){
+            console.log(error);
+        }
+    }
 
 
     const fetchSpecificHouse = async () => {
@@ -23,7 +57,6 @@ const  PropertyDetails = () => {
             const response = await axios.get(`http://localhost:3001/api/properties/${id}`);
             setSpecificHouse(response.data);
             setIsLoading(false);
-
         }
         catch(error){
             console.log(error);
@@ -31,10 +64,59 @@ const  PropertyDetails = () => {
     };
 
 
+    const onFavoritesPressed = async () => {
+
+        if(!isFavorite){
+        
+        try {
+            const response  = await axios.post('http://localhost:3001/api/favorites' , {
+            
+                user_id: jwtDecode(jwt).id,
+                property_id: id
+            } , config)
+
+            if(response.data){
+                console.log(response.data.message);
+                setIsFavorite(true); 
+            }
+
+        }
+        catch(error){
+            console.log(error);
+
+        }
+
+    }
+    else{
+        try{
+            const response = await axios.delete(`http://localhost:3001/api/favorites/${favoriteID}` , config);
+            if(response.data){
+                console.log(response.data);
+                setIsFavorite(false);
+            };
+        } catch(error){
+            console.log(error);
+        }
+    }
+    }
+   
+
+    //This is for loading the specific data of the property using the endpoint of the property. Another solution is to use the context and get them from the house context
+    // If loggedIn we will check if the property is favorited or not
     useEffect (() => {
         fetchSpecificHouse();
-    },   //This is for loading the specific data of the property using the endpoint of the property. Another solution is to use the context and get them from the house context
-    []);
+        
+    },[]);
+
+
+    useEffect(() => {
+        if(isLoggedIn){
+            console.log('We are logged in');
+            fetchisFavorite();
+            console.log('Function ran!')
+        }
+    } , [])
+
 
     if(isLoading){
         return(
@@ -103,8 +185,8 @@ const  PropertyDetails = () => {
                                 
                             </div>
                             <div>
-                                <button>
-                                    <AiOutlineHeart className="text-3xl text-violet-400  hover:text-violet-700"/> 
+                                <button onClick={(e) => onFavoritesPressed()}>
+                                    {isFavorite? (<AiFillHeart className="text-3xl text-violet-400  hover:text-violet-700"/>) : (<AiOutlineHeart className="text-3xl text-violet-400  hover:text-violet-700"/>)}
                                 </button>
                             </div>
                         </div>
