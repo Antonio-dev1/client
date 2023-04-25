@@ -25,8 +25,8 @@ const uploadPhotos = (e) => {
     }).then(res => {
         console.log(res.data.message);
         console.log(res.data.filePaths)
-        setCurrentPhotos([...currentPhotos , ...res.data.filePaths]);
-        setSavedPhotos([...currentPhotos , ...res.data.filePaths]);
+        //setCurrentPhotos([...currentPhotos , ...res.data.filePaths]);
+        setSavedPhotos([...savedPhotos , ...res.data.filePaths]);
     }).catch(err => {
         console.log(err.message);
     })
