@@ -38,7 +38,7 @@ const NavBar = () => {
 
     const onMessagesPressed = () => {
         if(isLoggedIn){
-            navigate('/messages');
+            navigate('/messenger');
             
         }
 

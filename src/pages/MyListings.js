@@ -11,7 +11,10 @@ import NavBar from '../components/navbar';
 const MyListings = () => {
     const [userHouses , setUserHouses] = useState([]);
     const [isLoading , setIsLoading] = useState(false);
-    const [error , setError] = useState(null);
+   const [error , setError] = useState(null);
+
+
+
 
     const jwt = sessionStorage.getItem("jwt");
     const userID = jwtDecode(jwt).id;
@@ -23,6 +26,7 @@ const MyListings = () => {
         try {
             const response = await axios.get("http://localhost:3001/api/properties/userproperty/" + userID);
             setUserHouses(response.data.property);
+
         } catch (error) {
             setError(error.message);
         }
@@ -32,6 +36,10 @@ const MyListings = () => {
     useEffect(() => {
         fetchUserHouses();
     }, []);
+
+
+
+
 
 
     if (isLoading) {

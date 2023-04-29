@@ -22,6 +22,7 @@ const UserSettingsForm  = () => {
   const [retypedPassword , setRetypedPassword] = useState('');
   const [noChange , setNoChange] = useState(false);
   const jwt = sessionStorage.getItem('jwt')
+  console.log(jwt)
   const id = jwtDecode(sessionStorage.getItem('jwt')).id
   const {handleLogout} = useContext(UserContext);
 

@@ -1,6 +1,6 @@
 import NavBar from "../components/navbar";
 import { housesData } from "../testdata";
-import { useParams , Link} from "react-router-dom";
+import { useParams , Link , useNavigate} from "react-router-dom";
 import { BiBed , BiBath , BiArea } from "react-icons/bi";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { ImSpinner2 } from "react-icons/im";
@@ -12,16 +12,20 @@ import { AiOutlineHeart , AiFillHeart} from "react-icons/ai";
 import {Carousel} from 'react-responsive-carousel';
 import axios, { AxiosHeaders } from "axios";
 
+
 const  PropertyDetails = () => {
     const [specificHouse , setSpecificHouse] = useState({});
     const [isLoading , setIsLoading] = useState(true);
     const [isFavorite , setIsFavorite] = useState(false);
     const [favoriteID , setFavoriteID] = useState('');
+    const [subject , setSubject] = useState('');
+    const [message , setMessage] = useState('');
     //Get the id for the property based on the url
     // Get the property from the house data
     const {id} = useParams(); 
     const {isLoggedIn} = useContext(UserContext);
     const jwt =  sessionStorage.getItem('jwt');
+    const navigate = useNavigate();
     const config = {
         headers: {
             Authorization: `Bearer ${jwt}`
@@ -77,6 +81,7 @@ const  PropertyDetails = () => {
 
             if(response.data){
                 console.log(response.data.message);
+                setFavoriteID(response.data._id);
                 setIsFavorite(true); 
             }
 
@@ -89,6 +94,7 @@ const  PropertyDetails = () => {
     }
     else{
         try{
+            console.log(favoriteID)
             const response = await axios.delete(`http://localhost:3001/api/favorites/${favoriteID}` , config);
             if(response.data){
                 console.log(response.data);
@@ -117,6 +123,14 @@ const  PropertyDetails = () => {
         }
     } , [])
 
+    const onSubjectChange = (event) => {
+        setSubject(event.target.value);
+    };
+
+    const onMessageChange = (event) => {
+        setMessage(event.target.value);
+    }
+
 
     if(isLoading){
         return(
@@ -127,9 +141,17 @@ const  PropertyDetails = () => {
         )
     }
     
-
+    const onViewSpecificiListingsPressed = (id) => {
+        if(!isLoggedIn){
+            alert('You need to be logged in to view other users listings');
+            navigate('/signin');
+        }
+        else{
+            navigate(`/otherUsersListing/${id}`)
+        }
+    };
    
-
+    const emailLink = `mailto:${specificHouse.userId.email}?subject=${subject}&body=${message}`;
 
     return ( <div>
         <NavBar/>
@@ -199,15 +221,15 @@ const  PropertyDetails = () => {
                             </div>
                         <div className="w-20 h-20"> 
                             <div>{specificHouse.userId.fullName}</div>
-                            <Link to="" className="text-violet-500 text-sm ">View Listings</Link>
+                            <button className="text-violet-500 text-sm " onClick={(e) => onViewSpecificiListingsPressed(specificHouse.userId._id)}>View Listings</button>
                         </div>
                     </div>
                     <form className="flex flex-col gap-y-4">
                         <input className="border border-gray-300 focus:border-violet-700 outline-none rounded w-full px-4 h-14 text-sm" placeholder = "Email" type = 'text'/> 
-                        <input className= "border border-gray-300 focus:border-violet-700 outline-none rounded w-full px-4 h-14 text-sm" placeholder = "Subject" type = 'text'/> 
-                        <textarea className="border border-gray-300 focus:border-violet-700 outline-none resize-none rounded w-full p-4 h-36 text-sm text-gray-400" placeholder = "Message"/> 
+                        <input className= "border border-gray-300 focus:border-violet-700 outline-none rounded w-full px-4 h-14 text-sm" onChange={(e)=> onSubjectChange(e)} placeholder = "Subject" type = 'text'/> 
+                        <textarea  onChange={(e) => onMessageChange(e)} className="border border-gray-300 focus:border-violet-700 outline-none resize-none rounded w-full p-4 h-36 text-sm text-gray-400" placeholder = "Message"/> 
                             <div className="flex gap-x-3">
-                                <button className="bg-violet-500 hover:bg-violet-600 text-white rounded p-4 text-sm w-full transition">Send an Email!</button>
+                                <a href = {emailLink} className="bg-violet-500 hover:bg-violet-600 text-white text-center rounded p-4 text-sm w-full transition">Send an Email!</a>
                                 <button className="border border-violet-500 text-violet-600 hover:border-violet-300 hover:text-violet-300 rounded  p-4 text-sm w-full
                                 transition">Chat!</button>
                             </div>

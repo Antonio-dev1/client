@@ -6,7 +6,7 @@ const HouseContextProvider = ({children}) => {
     const [houses , setHouses] = useState([]);
     const [locations , setLocations] = useState([]);
     const [location , setLocation] = useState('Location (any)');
-    const [property , setProperty] = useState('Property  (any)');
+    const [property , setProperty] = useState('Property (any)');
     const [properties , setProperties] = useState([]);
     const [price , setPrice] = useState('Price range (any)');
     const [prices , setPrices] = useState([]);
@@ -45,7 +45,7 @@ const HouseContextProvider = ({children}) => {
             areas.add(house.surface);
         });
         setLocations(['Location (any)' , ...locations]);
-        setProperties(['Property (any' , ...properties]);
+        setProperties(['Property (any)' , ...properties]);
         setPrices(['Price Range (any)' ,...prices]);
         setSpaces(['Space (any)' , ...areas]);
         setIsLoading(false);
@@ -65,7 +65,7 @@ const HouseContextProvider = ({children}) => {
             const response = await axios.post('http://localhost:3001/api/properties/search' , data);
             console.log(response.data.properties)
             const newHouses = response.data.properties;
-            console.log(houses);
+            console.log(newHouses);
             setTimeout(() => {
                 return newHouses.length < 1 ? setHouses([]) : setHouses(newHouses),
                 setIsLoading(false)
@@ -76,11 +76,13 @@ const HouseContextProvider = ({children}) => {
         
     };
 
+    const isDefault = (str) => {
+        return str.split(' ').includes('(any)');
+    }
+
     const createFilter = () => {
         const data = {}
-        const isDefault = (str) => {
-            return str.split(' ').includes('(any)');
-        }
+        
 
         if(!isDefault(property)){
             data.complexType = property;
@@ -96,7 +98,7 @@ const HouseContextProvider = ({children}) => {
             }
         }
 
-        if(!isDefault(space)){
+        if(!isDefault(String(space))){
             data.surface = {
                 $gte: space , $lte: space * 1.25
             }
@@ -108,7 +110,7 @@ const HouseContextProvider = ({children}) => {
 
     const onSearchPressed = () => {
         const data = createFilter();
-        console.log(data)
+        console.log('Data Logged' , data)
         fetchSearch(data);
     };
 
