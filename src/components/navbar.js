@@ -16,7 +16,7 @@ const NavBar = () => {
     const navigate = useNavigate();
     const onFavoritesPressed = () => {
         if(isLoggedIn){
-            navigate('/favorites');
+            navigate('/recommendations');
             
         }
 
@@ -110,7 +110,7 @@ const NavBar = () => {
         <div className= {navLinksClass}>
             <ul className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
                 <li className="hover:text-gray-500">
-                    <button onClick = { (e) => onFavoritesPressed()}>Favorites </button>
+                    <button onClick = { (e) => onFavoritesPressed()}>Recommendations</button>
                 </li>
 
                 <li className="hover:text-gray-500">

@@ -10,6 +10,8 @@ import MyListings from './pages/MyListings';
 import EditProperty from './pages/EditProperty';
 import OtherUsersListing from './pages/OtherUsersListing';
 import Messenger from './pages/Messenger';
+import Recommendations from './pages/Recommendations';
+
 
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
       <Route path="/editProperty/:id" element={<EditProperty/>} />
       <Route path="/otherUsersListing/:id" element={<OtherUsersListing/>} />
       <Route path="/messenger" element={<Messenger/>} />
+      <Route path="/recommendations" element = {<Recommendations/>}/>
 
     </Routes>
    
