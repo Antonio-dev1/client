@@ -20,6 +20,7 @@ const [messages , setMessages] = useState([]); // the messages between the curre
 const [arrivalMessage , setArrivalMessage] = useState(null); // the message that the current user has received from the selected user
 const [conversationId , setConversationId] = useState(""); // the id of the conversation between the current user and the selected user
 const [isLoadingConv, setIsLoadingConv] = useState(false); // a boolean that indicates if the conversation is loading or not
+
 const config = {
     headers: {
         Authorization: `Bearer ${jwt}`,
@@ -31,23 +32,36 @@ const SelectContact = (userId) => {
     setIsLoadingConv(true);
     setSelectedUserId(userId);
     getConversationId(userId);
-    getAllMessageChats(userId);
-    setIsLoadingConv(false);
+    setTimeout(() => {
+        return setIsLoadingConv(false);
+    } , 1000);
+    
     
 }
 
+//Waits for the conversation Id to update and then updates the messages for a smoother transition
+useEffect(() => {
+    if(conversationId){
+    getAllMessageChats(conversationId)
+    }
+} , [conversationId]);
+
 //Get a a way to send the conversation ID and you are done
 
-async function getAllMessageChats(userId)  {
+async function getAllMessageChats(conversation)  {
     try{
-        const response = await axios.get("http://localhost:3001/api/messages/user/"+ jwtDecode(jwt).id+"/"+userId ,config);
-        if(response.data){
+        const response = await axios.get("http://localhost:3001/api/messages/chat/"+conversationId ,config);
+        if(response.data.length>0){
             setMessages(response.data);
         }
         else{
             console.log("no messages");
+            setMessages([]);
         }
-    } 
+        
+    }
+    
+
     
     catch(err){
         console.log(err.message);
@@ -75,45 +89,24 @@ async function getChatUsers(){
             } 
         });
 
-        if(response.data){
-            console.log("members", response.data[0].members)
-            setChatUsers(response.data[0].members.filter(user => user._id != jwtDecode(jwt).id));
+        if(response.data.length > 0){
+            console.log("hello" , response.data)
+            console.log("members", response.data)
+            let usersArray = [];
+            for (let chat in response.data){
+                
+                usersArray.push(response.data[chat].members.filter(user => user._id !== jwtDecode(jwt).id)[0]);
+            }
+            console.log("usersArray" , usersArray)
+            setChatUsers(usersArray);
+        } else{
+            console.log("no conversations");
         }
     }
     catch(err){
         console.log(err.message);
     }
 }
-
-//get all chat users
-useEffect(()=> {
-    socket.current = io("ws://localhost:3010");
-    socket.current.on("getMessage" , data => {
-        setArrivalMessage({
-            senderId:data.senderId,
-            receiverId:jwtDecode(jwt).id,
-            text:data.text,
-            createdAt:Date.now()
-        })
-    });
-
-} , [])
-
-useEffect(() => {
-    getChatUsers();
-    console.log("chatUser" , chatUsers)
-} , [])
-
-
-
-useEffect(() => {
-    arrivalMessage && selectedUserId === arrivalMessage.senderId && setMessages(prev => [...prev , arrivalMessage]);
-},[arrivalMessage, selectedUserId]);
-
-const handleUserMessageChange = (e) => {
-    setUserMessage(e.target.value);
-};
-
 
 useEffect(() => {
     console.log(jwtDecode(jwt).id)
@@ -123,6 +116,42 @@ useEffect(() => {
 
  })
 } , [isLoggedIn]);
+
+//get all chat users
+useEffect(()=> {
+    socket.current = io("ws://localhost:3010");
+    socket.current.on("getMessage" , data => {
+        setArrivalMessage({
+            senderId:data.senderId,
+            text:data.text,
+            createdAt:Date.now()
+        })
+    });
+
+    console.log(arrivalMessage)
+
+} , [messages])
+
+useEffect(() => {
+    getChatUsers();
+    console.log("chatUser" , chatUsers)
+} , [])
+
+useEffect(() => {
+    console.log("messages" , messages)
+} , [messages]);
+
+
+useEffect(() => {
+    arrivalMessage && selectedUserId === arrivalMessage.senderId && setMessages(prev => [...prev , arrivalMessage]);
+},[arrivalMessage]);
+
+const handleUserMessageChange = (e) => {
+    setUserMessage(e.target.value);
+};
+
+
+
 
 
 const handleSubmit = async (e) => {
@@ -138,7 +167,7 @@ const handleSubmit = async (e) => {
 
     socket.current.emit("sendMessage" , {
         senderId:jwtDecode(jwt).id,
-        selectedUserId,
+        receiverId:selectedUserId,
         text:userMessage,
     });
 
@@ -165,7 +194,7 @@ const handleSubmit = async (e) => {
     if(isLoadingConv){
         return(
             <div className="flex justify-center items-center h-screen"> 
-                <ImSpinner2 className="animate-spin text-5xl"/>
+                <ImSpinner2 className="animate-spin text-5xl text-violet-500"/>
             
             </div>
         )
@@ -193,6 +222,7 @@ const handleSubmit = async (e) => {
                 </div>
                 <div className="bg-violet-400 w-2/3 mx-2 p-2 flex flex-col overflow-auto">
                     <div className="flex-grow">
+                        
                         {messages.map((message , index)=> {
                             return(
                             <Message key={index} message={message} myMessage={message.senderId === jwtDecode(jwt).id}/>

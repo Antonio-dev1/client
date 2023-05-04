@@ -17,7 +17,6 @@ const UsersBanner = () => {
             <img className='rounded-tl-lg' src ={HouseBanner} alt= "House"/>
         </div>
     </div>
-    <Search/>
     </section>
     );
 }

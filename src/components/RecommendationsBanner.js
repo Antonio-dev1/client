@@ -11,10 +11,9 @@ const RecommendationsBanner = () => {
         </h1>
     </div>
     <div className="hidden flex-1 lg:flex justify-end items-end ">
-            <img className='rounded-tl-lg' src ={recommendation} alt= "House"/>
+            <img className='rounded-tl-lg h-[500px]' src ={recommendation} alt= "House"/>
         </div>
     </div>
-    <OtherSearch/>
     </section>
     );
 }

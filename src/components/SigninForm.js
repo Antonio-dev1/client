@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from "./UserContext";
 import { useContext } from "react";
+import { set } from 'date-fns';
 
 const SigninForm = () => {
    
@@ -14,7 +15,7 @@ const SigninForm = () => {
     const [emailError , setEmailError] = useState('');
     const [passwordError , setPasswordError] = useState('');
     const [loginFailed , setLoginFailed] = useState(false);
-    const {isLoggedIn, setIsLoggedIn , setUser , setJwt} = useContext(UserContext);
+    const {isLoggedIn, setIsLoggedIn , user, setUser , setJwt} = useContext(UserContext);
 
     
 
@@ -73,6 +74,7 @@ const SigninForm = () => {
                 password: loginPassword,
             }).then((response) => {
                 setIsLoggedIn(true);
+                setUser(response.data.user);
                 setJwt(response.data.token);
                 sessionStorage.setItem('jwt' , response.data.token);
             }).catch(err => {
@@ -80,14 +82,17 @@ const SigninForm = () => {
                 console.log(err)
             });
         }
-        
+
+        if(user.isAdmin === true){
+            navigate('/adminDashboard');
+        }
        
     }
 
     useEffect(() => {
-        if(isLoggedIn){
+        if(isLoggedIn && user.isAdmin === false){
         navigate('/');
-        }
+        } 
     } , [isLoggedIn])
 
     return (  

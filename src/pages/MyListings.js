@@ -6,14 +6,39 @@ import jwtDecode from 'jwt-decode';
 import UsersHouse from '../components/UsersHouse';
 import UsersBanner from '../components/UsersBanner';
 import NavBar from '../components/navbar';
+import OtherSearch from '../components/OtherSearch';
 
 
 const MyListings = () => {
-    const [userHouses , setUserHouses] = useState([]);
-    const [isLoading , setIsLoading] = useState(false);
+   const [userHouses , setUserHouses] = useState([]);
+   const [isLoading , setIsLoading] = useState(false);
    const [error , setError] = useState(null);
+   const [query , setQuery] = useState("");
+   const [filteredSearches , setFilteredSearches] = useState(userHouses);
 
 
+
+const searchByTitle = (e) => {
+    e.preventDefault();
+    let updatedList = [...userHouses];
+        if(query === ""){
+            console.log("We are in the if of the return search");
+            updatedList = [...userHouses];
+        } else{
+            console.log("We are in the else of the return search");
+            console.log("The query is: " + query);
+           updatedList =  updatedList.filter((house) => {
+                console.log("The house title is: " + house.title);
+                return house.title.toLowerCase().includes(query.toLowerCase()) || house.location.toLowerCase().includes(query.toLowerCase());
+            })
+        }       
+
+
+    
+    setFilteredSearches(updatedList);
+
+
+}
 
 
     const jwt = sessionStorage.getItem("jwt");
@@ -26,6 +51,7 @@ const MyListings = () => {
         try {
             const response = await axios.get("http://localhost:3001/api/properties/userproperty/" + userID);
             setUserHouses(response.data.property);
+            setFilteredSearches(response.data.property);
 
         } catch (error) {
             setError(error.message);
@@ -53,6 +79,7 @@ const MyListings = () => {
             </div>
         <div>
             <UsersBanner/>
+            <OtherSearch setUserQuery={setQuery} onSearchPressed={searchByTitle} filteredSearchs = {filteredSearches} query={query}/>
         </div>
         
 
@@ -60,9 +87,9 @@ const MyListings = () => {
             <div className="container mx-auto">
                 <div className="py-20">
                 <div className= "grid md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-14 ">
-                {userHouses.map((house , index )=> {
+                {filteredSearches.map((house , index )=> {
                     return(
-                     <UsersHouse  key = {index} usershouse= {house} houseid = {house._id}/> 
+                     <UsersHouse  key = {index} usershouse= {house} houseid = {house._id} isAdmin={false}/> 
                     );
                 })}
                 </div>

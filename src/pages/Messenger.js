@@ -1,5 +1,6 @@
 import Chat from "../components/Chat";
 const Messenger = () => {
+    
     return ( 
         <div>
             <Chat/>

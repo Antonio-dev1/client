@@ -4,7 +4,7 @@ import { useNavigate , Link} from "react-router-dom";
 import {useState} from "react";
 import {ImSpinner2} from 'react-icons/im';
 
-const UsersHouse = ({usershouse , houseid}) => {
+const UsersHouse = ({usershouse , houseid , filteredSearches , isAdmin}) => {
 
     const {_id , imageurls , complexType, listingType , location, bedrooms, bathrooms ,surface, price} = usershouse;
     const navigate = useNavigate();
@@ -82,7 +82,8 @@ const UsersHouse = ({usershouse , houseid}) => {
             <div>
                 <div className=" flex items-center justify-end gap-x-6 mb-10">
                     <div>
-                        <button onClick={handleEdit} className="text-white bg-violet-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
+                        {isAdmin ? (<div></div>):(<button onClick={handleEdit} className="text-white bg-violet-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>)}
+                        
                         </div>
                         <div>
                         <button  onClick={(e) => handleDelete(e)} className="text-white bg-pink-300 hover:bg-pink-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete</button>

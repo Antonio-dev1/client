@@ -20,6 +20,7 @@ const  PropertyDetails = () => {
     const [favoriteID , setFavoriteID] = useState('');
     const [subject , setSubject] = useState('');
     const [message , setMessage] = useState('');
+    const [creatingConversation , setCreatingConversation] = useState(false);
     //Get the id for the property based on the url
     // Get the property from the house data
     const {id} = useParams(); 
@@ -150,6 +151,37 @@ const  PropertyDetails = () => {
             navigate(`/otherUsersListing/${id}`)
         }
     };
+
+    const createConversation = async () => {
+        try {
+            const response = await axios.post('http://localhost:3001/api/conversations' , {
+                members : [jwtDecode(jwt).id , specificHouse.userId._id]
+            } , config);
+        }
+
+        catch(error){
+            console.log(error)
+        }
+    };
+
+    const onChatPressed = (e) => {
+        e.preventDefault();
+        if(!isLoggedIn){
+            alert('You need to be logged in to chat with the owner');
+            navigate('/signin');
+        } else{
+            if(jwtDecode(jwt).id === specificHouse.userId._id){
+                alert('You cannot chat with yourself');
+            }
+            else{
+                createConversation();
+                setTimeout(() => {
+                    return navigate('/messenger');
+                } , 1000)
+                
+            }
+        }
+    };
    
     const emailLink = `mailto:${specificHouse.userId.email}?subject=${subject}&body=${message}`;
 
@@ -231,7 +263,7 @@ const  PropertyDetails = () => {
                             <div className="flex gap-x-3">
                                 <a href = {emailLink} className="bg-violet-500 hover:bg-violet-600 text-white text-center rounded p-4 text-sm w-full transition">Send an Email!</a>
                                 <button className="border border-violet-500 text-violet-600 hover:border-violet-300 hover:text-violet-300 rounded  p-4 text-sm w-full
-                                transition">Chat!</button>
+                                transition" onClick = {(e) => onChatPressed(e)}>Chat!</button>
                             </div>
                         
                     </form>
