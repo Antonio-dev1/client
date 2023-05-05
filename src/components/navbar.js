@@ -69,6 +69,18 @@ const NavBar = () => {
         }
     }
 
+    const clickMyFavorites = () => {
+        if(isLoggedIn){
+            navigate('/myFavorites');
+            
+        }
+
+        else{
+            navigate('/signin');
+        }
+    };
+    
+
     const handleLogout = () => {
 
         setLogginOut(true);
@@ -127,6 +139,10 @@ const NavBar = () => {
                 </li>
                 <li className= "hover:text-gray-500">
                     <button onClick={(e) => onMyListingsPressed()}> My Listings</button>
+                </li>
+                <li onClick={(e) => clickMyFavorites()} className='hover:text-gray-500'>
+                    <button>Favorites</button>
+
                 </li>
             </ul>
 

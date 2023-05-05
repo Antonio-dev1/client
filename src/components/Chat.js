@@ -26,7 +26,7 @@ const config = {
         Authorization: `Bearer ${jwt}`,
     }
 }
-console.log(jwt)
+
 
 const SelectContact = (userId) => {
     setIsLoadingConv(true);

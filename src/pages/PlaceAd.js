@@ -6,7 +6,8 @@ import countryList from 'react-select-country-list';
 import {BsHouse} from 'react-icons/bs';
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { set } from "date-fns";
 
 //Use memo since countries will not change on every render so that we do not have to recompute the value on every render
 const PlaceAd  = () => {
@@ -26,6 +27,10 @@ const PlaceAd  = () => {
     const [success , setSuccess] = useState(false);
     const options = useMemo(() => countryList().getData(), []);
     const jwt = sessionStorage.getItem('jwt');
+    setTimeout(() => {
+
+    } , 1000);
+    const navigate = useNavigate();
     const config = {
         headers: { Authorization: `Bearer ${jwt}` }
     }
@@ -53,6 +58,7 @@ const PlaceAd  = () => {
             setIsUploading(false);
             setSuccess(true);
             setButtonOff(true);
+            navigate('/myListings')
         }catch(err){
             console.log(err);
         }
@@ -113,6 +119,7 @@ const PlaceAd  = () => {
         setBathrooms('');
         setBedrooms('');
         setArea('');
+        navigate('/');
     };
 
 

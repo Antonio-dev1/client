@@ -44,10 +44,10 @@ const HouseContextProvider = ({children}) => {
             prices.add(house.price);
             areas.add(house.surface);
         });
-        setLocations(['Location (any)' , ...locations]);
+        setLocations(['Location (any)' , ...Array.from(locations).sort()]);
         setProperties(['Property (any)' , ...properties]);
-        setPrices(['Price Range (any)' ,...prices]);
-        setSpaces(['Space (any)' , ...areas]);
+        setPrices(['Price Range (any)' ,...Array.from(prices).sort()]);
+        setSpaces(['Space (any)' , ...Array.from(areas).sort()]);
         setIsLoading(false);
         } catch (error) {
             console.log(error);

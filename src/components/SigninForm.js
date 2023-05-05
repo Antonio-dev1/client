@@ -83,9 +83,7 @@ const SigninForm = () => {
             });
         }
 
-        if(user.isAdmin === true){
-            navigate('/adminDashboard');
-        }
+       
        
     }
 
@@ -93,6 +91,10 @@ const SigninForm = () => {
         if(isLoggedIn && user.isAdmin === false){
         navigate('/');
         } 
+
+        else if(isLoggedIn && user.isAdmin === true){
+            navigate('/adminDashboard');
+        }
     } , [isLoggedIn])
 
     return (  

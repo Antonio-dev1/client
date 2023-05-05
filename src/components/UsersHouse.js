@@ -10,17 +10,18 @@ const UsersHouse = ({usershouse , houseid , filteredSearches , isAdmin}) => {
     const navigate = useNavigate();
     const jwt = sessionStorage.getItem("jwt");
     const [isDeleting , setIsDeleting] = useState(false);
+    console.log(jwt)
     const config = {
         headers: { Authorization: `Bearer ${jwt}` }
     }
     const handleDelete = async (e) => {
+        console.log("In Delete!")
+        console.log("The id is: " + _id);
         try{
         setIsDeleting(true);
-        const response = await axios.delete("http://localhost:3001/api/properties/" + houseid , config);
+        const response = await axios.delete("http://localhost:3001/api/properties/" + _id , config);
         console.log(response);
-        setTimeout(() => {
-            setIsDeleting(false);
-        } , 1000)
+        setIsDeleting(false);
         
         }
         catch(error){

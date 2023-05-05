@@ -13,6 +13,7 @@ import Messenger from './pages/Messenger';
 import Recommendations from './pages/Recommendations';
 import AdminDashboard from './pages/AdminDashboard';
 import MonitorListings from './pages/MonitorListings';
+import Favorites from './pages/Favorites';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
       <Route path="/otherUsersListing/:id" element={<OtherUsersListing/>} />
       <Route path="/messenger" element={<Messenger/>} />
       <Route path="/recommendations" element = {<Recommendations/>}/>
+      <Route path="/myFavorites" element={<Favorites/>} />
       <Route path="/adminDashboard" element={<AdminDashboard/>} />
       <Route path ="/adminDashboard/userProperties/:id" element={<MonitorListings/>} />
 

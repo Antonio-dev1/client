@@ -196,7 +196,7 @@ const  PropertyDetails = () => {
                     </div>
                     <div className="mb-4 lg:mb-0 flex gap-x-2 text-sm">
                         <div className="bg-green-500 text-white px-3 rounded-full ">{specificHouse.complexType}</div>
-                        <div className="bg-violet-500 text-white px-3 rounded-full ">{specificHouse.location.split(',')[1]}</div>
+                        <div className="bg-violet-500 text-white px-3 rounded-full ">{specificHouse.location.split(',')[0]}</div>
                         <div className="bg-violet-500 text-white px-3 rounded-full ">{specificHouse.listingType}</div>
 
                     </div>
